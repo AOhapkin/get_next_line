@@ -1,6 +1,32 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
+char	*cut_buffer(char *buffer)
+{
+	char	*temp;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (buffer[i] != '\n' && buffer[i])
+		i++;
+	if (!buffer[i])
+	{
+		free(buffer);
+		return (NULL);
+	}
+	i++;
+	temp = ft_newstr(ft_strlen(buffer) - i);
+	j = 0;
+	while (buffer[i])
+	{
+		temp[j] = buffer[i + j];
+		j++;
+	}
+	free(buffer);
+	return (temp);
+}
+
 char	*save_line(char *buffer)
 {
 	char	*line;
@@ -25,14 +51,14 @@ char	*save_line(char *buffer)
 	return (line);
 }
 
-char	*save_buffer(int fd, char *buff)
+char	*save_buffer(int fd, char *buffer)
 {
 	char	*result;
 	int		bytes;
 	char 	*temp;
 
-	if (!buff)
-		buff = malloc(sizeof(char));
+	if (!buffer)
+		buffer = malloc(sizeof(char));
 	result = malloc(sizeof(char) * (BUFF_SIZE + 1));
 	bytes = 1;
 	while (bytes)
@@ -44,21 +70,20 @@ char	*save_buffer(int fd, char *buff)
 			return (NULL);
 		}
 		result[bytes] = '\0';
-		temp = buff;
-		buff = ft_strjoin(buff, result);
+		temp = buffer;
+		buffer = ft_strjoin(buffer, result);
 		free(temp);
 		if (ft_strchr(result, '\n'))
 			break;
 	}
 	free(result);
-	return (buff);
+	return (buffer);
 }
 
 char	*get_next_line(int fd)
 {
-//	int 	i = 0;
 	static char	*buff;
-//	char	*line;
+	char	*line;
 
 	if (fd < 0 || BUFF_SIZE <= 0)
 		return (NULL);

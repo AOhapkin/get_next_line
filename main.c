@@ -12,7 +12,7 @@ int	main(void)
 //		printf("%s\n", line);
 //	}
 	line = get_next_line(fd);
-	printf("\n\n\nВызов из мейна %s\n", line);
+//	printf("\n\n\nВызов из мейна %s\n", line);
 	free(line);
 	return (0);
 }
