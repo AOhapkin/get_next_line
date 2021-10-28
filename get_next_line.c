@@ -19,7 +19,7 @@ char	*save_buffer(int fd, char *buff)
 			return (NULL);
 		}
 		result[bytes] = '\0';
-		result = ft_strjoin(buff, result);
+		buff = ft_strjoin(buff, result);
 		if (ft_strchr(result, '\n'))
 			break;
 	}
@@ -31,20 +31,20 @@ char	*get_next_line(int fd)
 {
 //	int 	i = 0;
 	static char	*buff;
-	char	*line;
+//	char	*line;
 
 	if (fd < 0 || BUFF_SIZE <= 0)
 		return (NULL);
 	buff = save_buffer(fd, buff);
 	if (!buff)
 		return (NULL);
-	line = save_line(buff);
-	buff = cut_buffer(buff);
+//	line = save_line(buff);
+//	buff = cut_buffer(buff);
 
 //	while (i < BUFFER_SIZE) {
 //		buff[i++] = 0;
 //	}
 //	ssize_t read_bytes = read(fd, buff, BUFFER_SIZE);
-//	printf("Прочитано %li байт\nВот что прочитано: \"%s\"", read_bytes, buff);
-	return line;
+	printf("Вот что прочитано: \"%s\"", buff);
+	return buff;
 }
