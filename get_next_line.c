@@ -18,8 +18,10 @@ char	*save_buffer(int fd, char *buff)
 			free(result);
 			return (NULL);
 		}
-		result[bytes] = '\0';
+//		result[bytes] = '\0'; // проверь это
+		char *temp = buff;
 		buff = ft_strjoin(buff, result);
+		free(temp);
 		if (ft_strchr(result, '\n'))
 			break;
 	}
