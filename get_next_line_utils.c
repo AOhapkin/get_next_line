@@ -50,3 +50,38 @@ char	*ft_strchr(const char *str, int c)
 		return ((char *)str);
 	return (NULL);
 }
+
+char	*ft_newstr(size_t size)
+{
+	char	*dest;
+
+	dest = malloc(size + 1);
+	if (!dest)
+		return (NULL);
+	return ((char *)ft_memset(dest, 0, size));
+}
+
+void	*ft_memalloc(size_t size)
+{
+	void	*dest;
+
+	dest = malloc(size);
+	if (!dest)
+		return (NULL);
+	return (ft_memset(dest, 0, size));
+}
+
+void	*ft_memset(void *dest, int c, size_t count)
+{
+	size_t			i;
+	unsigned char	*ptr;
+
+	i = 0;
+	ptr = (unsigned char *)dest;
+	while (i < count)
+	{
+		ptr[i] = (unsigned char)c;
+		i++;
+	}
+	return (dest);
+}

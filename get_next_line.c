@@ -1,10 +1,35 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
+char	*save_line(char *buffer)
+{
+	char	*line;
+	int		i;
+
+	if (!buffer)
+		return (NULL);
+	i = 0;
+	while (buffer[i] != '\n' && buffer[i])
+		i++;
+	if (buffer[i] != '\n')
+		i++;
+	line = ft_newstr(i);
+	i = 0;
+	while (buffer[i] != '\n' && buffer[i])
+	{
+		line[i] = buffer[i];
+		i++;
+	}
+	if (buffer[i] != '\n')
+		line[i] = '\n';
+	return (line);
+}
+
 char	*save_buffer(int fd, char *buff)
 {
 	char	*result;
 	int		bytes;
+	char 	*temp;
 
 	if (!buff)
 		buff = malloc(sizeof(char));
@@ -18,8 +43,8 @@ char	*save_buffer(int fd, char *buff)
 			free(result);
 			return (NULL);
 		}
-//		result[bytes] = '\0'; // проверь это
-		char *temp = buff;
+		result[bytes] = '\0';
+		temp = buff;
 		buff = ft_strjoin(buff, result);
 		free(temp);
 		if (ft_strchr(result, '\n'))
@@ -40,13 +65,10 @@ char	*get_next_line(int fd)
 	buff = save_buffer(fd, buff);
 	if (!buff)
 		return (NULL);
-//	line = save_line(buff);
+	line = save_line(buff);
 //	buff = cut_buffer(buff);
 
-//	while (i < BUFFER_SIZE) {
-//		buff[i++] = 0;
-//	}
-//	ssize_t read_bytes = read(fd, buff, BUFFER_SIZE);
-	printf("Вот что прочитано: \"%s\"", buff);
-	return buff;
+
+	printf("Вот что прочитано: \"%s\"", line);
+	return line;
 }
