@@ -51,33 +51,37 @@ char	*save_line(char *buffer)
 	return (line);
 }
 
-char	*save_buffer(int fd, char *buffer)
+char	*read_until_divider(int fd)
 {
+	char	*buffer;
 	char	*result;
-	int		bytes;
+	int		byte_read;
 	char 	*temp;
 
-	if (!buffer)
-		buffer = malloc(sizeof(char));
-	result = malloc(sizeof(char) * (BUFF_SIZE + 1));
-	bytes = 1;
-	while (bytes)
+	result = NULL;
+	buffer = malloc(sizeof(char) * (BUFF_SIZE + 1));
+	byte_read = 1;
+	while (byte_read)
 	{
-		bytes = read(fd, result, BUFF_SIZE);
-		if (bytes == -1)
+		byte_read = read(fd, buffer, BUFF_SIZE);
+		if (byte_read == -1 || byte_read == 0)
+			break;
+		buffer[byte_read] = '\0';
+		temp = result;
+		if (result)
+			result = ft_strjoin(result, buffer);
+		else
+			result = ft_strdup(buffer);
+		if (temp)
 		{
-			free(result);
-			return (NULL);
+			free(temp);
+			temp = NULL;
 		}
-		result[bytes] = '\0';
-		temp = buffer;
-		buffer = ft_strjoin(buffer, result);
-		free(temp);
-		if (ft_strchr(result, '\n'))
+		if (ft_strchr(buffer, DIVIDER))
 			break;
 	}
-	free(result);
-	return (buffer);
+	free(buffer);
+	return (result);
 }
 
 char	*get_next_line(int fd)
