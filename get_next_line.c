@@ -1,6 +1,38 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
+char	*read_until_divider(int fd)
+{
+	char	*buffer;
+	char	*result;
+	int		byte_read;
+	char 	*tmp_for_freeing;
+
+	result = NULL;
+	buffer = malloc(sizeof(char) * (BUFF_SIZE + 1));
+	byte_read = 1;
+	while (byte_read)
+	{
+		byte_read = read(fd, buffer, BUFF_SIZE);
+		if (byte_read == -1 || byte_read == 0)
+			break;
+		buffer[byte_read] = '\0';
+		tmp_for_freeing = result;
+		if (result)
+			result = ft_strjoin(result, buffer);
+		else
+			result = ft_strdup(buffer);
+		if (tmp_for_freeing) {
+			free(tmp_for_freeing);
+			tmp_for_freeing = NULL;
+		}
+		if (ft_strchr(buffer, DIVIDER))
+			break;
+	}
+	free(buffer);
+	return (result);
+}
+
 char	*cut_head_from_static(char **line_tail)
 {
 	char	*pointer_to_divider;
@@ -22,30 +54,6 @@ char	*cut_head_from_static(char **line_tail)
 		pointer_to_divider[1] = '\0';
 	}
 	return (result);
-}
-
-char	*save_line(char *buffer)
-{
-	char	*line;
-	int		i;
-
-	if (!buffer)
-		return (NULL);
-	i = 0;
-	while (buffer[i] != '\n' && buffer[i])
-		i++;
-	if (buffer[i] != '\n')
-		i++;
-	line = ft_newstr(i);
-	i = 0;
-	while (buffer[i] != '\n' && buffer[i])
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-	if (buffer[i] != '\n')
-		line[i] = '\n';
-	return (line);
 }
 
 char	*read_until_divider(int fd)
