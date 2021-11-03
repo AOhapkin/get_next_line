@@ -11,8 +11,7 @@ char	*read_until_divider(int fd)
 	result = NULL;
 	buffer = malloc(sizeof(char) * (BUFF_SIZE + 1));
 	byte_read = 1;
-
-	while (byte_read)
+	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFF_SIZE);
 		if (byte_read == -1 || byte_read == 0)
@@ -28,7 +27,6 @@ char	*read_until_divider(int fd)
 			free(tmp_for_freeing);
 			tmp_for_freeing = NULL;
 		}
-
 		if (ft_strchr(buffer, DIVIDER))
 			break;
 	}
@@ -41,9 +39,7 @@ char        *cut_head_from_static(char **line_tail) {
 	char    *result;
 
 	if (!*line_tail)
-	{
 		return NULL;
-	}
 	result = NULL;
 	pointer_to_divider = ft_strchr(*line_tail, DIVIDER);
 	if (pointer_to_divider == NULL || pointer_to_divider[0] == '\0' || pointer_to_divider[1] == '\0')
@@ -72,9 +68,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	new_head = cut_head_from_static(&line_tail);
 	if (new_head && ft_strchr(new_head, DIVIDER))
-	{
 		return new_head;
-	}
 	else
 	{
 		read_to_divider = read_until_divider(fd);
