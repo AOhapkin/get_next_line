@@ -1,30 +1,27 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
-char	*cut_buffer(char *buffer)
+char	*cut_head_from_static(char **line_tail)
 {
-	char	*temp;
-	int		i;
-	int		j;
+	char	*pointer_to_divider;
+	char	*result;
 
-	i = 0;
-	while (buffer[i] != '\n' && buffer[i])
-		i++;
-	if (!buffer[i])
-	{
-		free(buffer);
+	if (!line_tail)
 		return (NULL);
-	}
-	i++;
-	temp = ft_newstr(ft_strlen(buffer) - i);
-	j = 0;
-	while (buffer[i])
+	result = NULL;
+	pointer_to_divider = ft_strchr(*line_tail, DIVIDER);
+	if (pointer_to_divider == NULL || pointer_to_divider[0] == '\0' || pointer_to_divider[1] == '\0')
 	{
-		temp[j] = buffer[i + j];
-		j++;
+		result = *line_tail;
+		*line_tail = NULL;
 	}
-	free(buffer);
-	return (temp);
+	else
+	{
+		result = *line_tail;
+		*line_tail = ft_strdup(pointer_to_divider + 1);
+		pointer_to_divider[1] = '\0';
+	}
+	return (result);
 }
 
 char	*save_line(char *buffer)
