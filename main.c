@@ -9,9 +9,9 @@ int	main(void)
 	fd = open("READ_THIS", O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
-		printf("%s\n", line);
+		line = get_next_line(fd);
+		printf("||%s||\n", line);
+		free(line);
 	}
-	// line = get_next_line(fd);
-	free(line);
 	return (0);
 }
