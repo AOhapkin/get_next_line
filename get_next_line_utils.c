@@ -12,6 +12,12 @@
 
 #include "get_next_line.h"
 
+void	free_tmp(char *tmp_for_freeing)
+{
+	free(tmp_for_freeing);
+	tmp_for_freeing = NULL;
+}
+
 size_t	ft_strlen(const char *str)
 {
 	size_t	i;

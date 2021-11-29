@@ -13,12 +13,6 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
-void	free_tmp(char *tmp_for_freeing)
-{
-	free(tmp_for_freeing);
-	tmp_for_freeing = NULL;
-}
-
 char	*set_result(char *result, char *buffer)
 {
 	if (result)
