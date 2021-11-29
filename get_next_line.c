@@ -13,11 +13,11 @@
 #include "get_next_line.h"
 #include "stdio.h"
 
-void	free_tmp(char *tmp_for_freeing)
-{
-	free(tmp_for_freeing);
-	tmp_for_freeing = NULL;
-}
+//void	free_tmp(char *tmp_for_freeing)
+//{
+//	free(tmp_for_freeing);
+//	tmp_for_freeing = NULL;
+//}
 
 char	*set_result(char *result, char *buffer)
 {
@@ -28,55 +28,78 @@ char	*set_result(char *result, char *buffer)
 	return (result);
 }
 
-char	*read_until_divider(int fd)
+char	*read_until_divider(int fd, char *line)
 {
 	char	*buffer;
-	char	*result;
 	int		byte_read;
-	char	*tmp_for_freeing;
+	char	*temp;
 
-	result = NULL;
 	buffer = malloc(sizeof(char) * (BUFF_SIZE + 1));
+	if (!buffer)
+		return (NULL);
 	byte_read = 1;
-	while (byte_read > 0)
+	while (byte_read > 0 && !(ft_strchr(line, DIVIDER)))
 	{
 		byte_read = read(fd, buffer, BUFF_SIZE);
-		if (byte_read == -1 || byte_read == 0)
+		if (byte_read <= 0)
 			break ;
 		buffer[byte_read] = '\0';
-		tmp_for_freeing = result;
-		result = set_result(result, buffer);
-		if (tmp_for_freeing)
-			free_tmp(tmp_for_freeing);
-		if (ft_strchr(buffer, DIVIDER))
-			break ;
+		temp = line;
+		line = ft_strjoin(line, buffer);
+		free(temp);
 	}
 	free(buffer);
-	return (result);
+	return (line);
 }
 
-char	*get_head_from_line(char **line_tail)
+char	*get_head_from_line(char *line)
 {
-	char	*pointer_to_divider;
 	char	*result;
+	int		i;
 
-	if (!*line_tail)
+	if (!line)
 		return (NULL);
-	result = NULL;
-	pointer_to_divider = ft_strchr(*line_tail, DIVIDER);
-	if (pointer_to_divider == NULL || pointer_to_divider[0] == '\0'
-		|| pointer_to_divider[1] == '\0')
+	i = 0;
+	while (line[i] && line[i] != DIVIDER)
+		i++;
+	if (line[i] == DIVIDER)
+		i++;
+	result = (char *)malloc(sizeof(char) * (i + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (line[i] && line[i] != DIVIDER)
 	{
-		result = *line_tail;
-		*line_tail = NULL;
+		result[i] = line[i];
+		i++;
 	}
-	else
+	if (line[i] == DIVIDER)
 	{
-		result = *line_tail;
-		*line_tail = ft_strdup(pointer_to_divider + 1);
-		pointer_to_divider[1] = '\0';
+		result[i] = DIVIDER;
+		i++;
 	}
+	result[i] = '\0';
 	return (result);
+//	char	*pointer_to_divider;
+//	char	*result;
+//
+//	if (!*line)
+//		return (NULL);
+//	result = NULL;
+//	pointer_to_divider = ft_strchr(*line, DIVIDER);
+//	if (pointer_to_divider == NULL || pointer_to_divider[0] == '\0'
+//		|| pointer_to_divider[1] == '\0')
+//	{
+//		result = *line;
+//		*line = NULL;
+//	}
+//	else
+//	{
+//		result = *line;
+//		*line = ft_strdup(pointer_to_divider + 1);
+//		pointer_to_divider[1] = '\0';
+//	}
+//	return (result);
 }
 
 char *cut_head_from_line(char *line)
@@ -86,7 +109,7 @@ char *cut_head_from_line(char *line)
 	char	*new_line;
 
 	i = 0;
-	while (line[i] && line[i] != '\n')
+	while (line[i] && line[i] != DIVIDER)
 		i++;
 	if (!line[i])
 	{
@@ -111,7 +134,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFF_SIZE <= 0)
 		return (NULL);
-	line = read_until_divider(fd);
+	line = read_until_divider(fd, line);
 	if (!line)
 	{
 		free(line);
