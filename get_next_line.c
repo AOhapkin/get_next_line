@@ -73,12 +73,38 @@ char	*cut_head_from_static(char **line_tail)
 	return (result);
 }
 
+char	*do_something(char **line_tail, char *new_head, int fd)
+{
+	char		*read_to_divider;
+	char		*tmp_for_freeing;
+	char		*ptr_to_div;
+
+	read_to_divider = read_until_divider(fd);
+	if (new_head && read_to_divider)
+	{
+		tmp_for_freeing = read_to_divider;
+		read_to_divider = ft_strjoin(new_head, read_to_divider);
+		free(tmp_for_freeing);
+		free(new_head);
+	}
+	else if (new_head)
+		read_to_divider = new_head;
+	else if (!read_to_divider)
+		return (NULL);
+	ptr_to_div = ft_strchr(read_to_divider, DIVIDER);
+	if (ptr_to_div && ptr_to_div[0] != '\0' && ptr_to_div[1] != '\0')
+	{
+		*line_tail = ft_strdup(ptr_to_div + 1);
+		ptr_to_div[1] = '\0';
+		return (read_to_divider);
+	}
+	else
+		return (read_to_divider);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*line_tail;
-	char		*read_to_divider;
-	char		*tmp_for_freeing;
-	char		*pointer_to_divider;
 	char		*new_head;
 
 	if (fd < 0 || BUFF_SIZE <= 0)
@@ -87,28 +113,5 @@ char	*get_next_line(int fd)
 	if (new_head && ft_strchr(new_head, DIVIDER))
 		return (new_head);
 	else
-	{
-		read_to_divider = read_until_divider(fd);
-		if (new_head && read_to_divider)
-		{
-			tmp_for_freeing = read_to_divider;
-			read_to_divider = ft_strjoin(new_head, read_to_divider);
-			free(tmp_for_freeing);
-			free(new_head);
-		}
-		else if (new_head)
-			read_to_divider = new_head;
-		else if (!read_to_divider)
-			return (NULL);
-		pointer_to_divider = ft_strchr(read_to_divider, DIVIDER);
-		if (pointer_to_divider && pointer_to_divider[0] != '\0'
-			&& pointer_to_divider[1] != '\0')
-		{
-			line_tail = ft_strdup(pointer_to_divider + 1);
-			pointer_to_divider[1] = '\0';
-			return (read_to_divider);
-		}
-		else
-			return (read_to_divider);
-	}
+		return (do_something(&line_tail, new_head, fd));
 }
