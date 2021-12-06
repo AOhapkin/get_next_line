@@ -73,7 +73,7 @@ char	*cut_head_from_static(char **line_tail)
 	return (result);
 }
 
-char	*do_something(char **line_tail, char *new_head, int fd)
+char	*read_file(char **line_tail, char *new_head, int fd)
 {
 	char		*read_to_divider;
 	char		*tmp_for_freeing;
@@ -113,5 +113,5 @@ char	*get_next_line(int fd)
 	if (new_head && ft_strchr(new_head, DIVIDER))
 		return (new_head);
 	else
-		return (do_something(&line_tail, new_head, fd));
+		return (read_file(&line_tail, new_head, fd));
 }

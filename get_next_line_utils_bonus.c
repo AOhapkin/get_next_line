@@ -1,4 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gmyriah <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/27 15:10:02 by gmyriah           #+#    #+#             */
+/*   Updated: 2021/11/27 16:50:04 by gmyriah          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
+
+void	free_tmp(char *tmp_for_freeing)
+{
+	free(tmp_for_freeing);
+	tmp_for_freeing = NULL;
+}
 
 size_t	ft_strlen(const char *str)
 {
