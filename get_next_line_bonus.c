@@ -104,10 +104,10 @@ char	*read_file(char **line_tail, char *new_head, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*line_tail[256];
+	static char	*line_tail[MAX_FD];
 	char		*new_head;
 
-	if (fd < 0 || BUFF_SIZE <= 0)
+	if (fd < 0 || BUFF_SIZE <= 0 || fd > MAX_FD)
 		return (NULL);
 	new_head = cut_head_from_static(&line_tail[fd]);
 	if (new_head && ft_strchr(new_head, DIVIDER))
