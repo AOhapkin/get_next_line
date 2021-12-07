@@ -12,7 +12,7 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE	42
+# define BUFFER_SIZE	42
 # define DIVIDER	'\n'
 # define MAX_FD		256
 

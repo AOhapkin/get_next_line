@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "stdio.h"
 
 char	*set_result(char *result, char *buffer)
 {
@@ -30,11 +29,11 @@ char	*read_until_divider(int fd)
 	char	*tmp_for_freeing;
 
 	result = NULL;
-	buffer = malloc(sizeof(char) * (BUFF_SIZE + 1));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	byte_read = 1;
 	while (byte_read > 0)
 	{
-		byte_read = read(fd, buffer, BUFF_SIZE);
+		byte_read = read(fd, buffer, BUFFER_SIZE);
 		if (byte_read == -1 || byte_read == 0)
 			break ;
 		buffer[byte_read] = '\0';
@@ -107,7 +106,7 @@ char	*get_next_line(int fd)
 	static char	*line_tail;
 	char		*new_head;
 
-	if (fd < 0 || BUFF_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	new_head = cut_head_from_static(&line_tail);
 	if (new_head && ft_strchr(new_head, DIVIDER))
