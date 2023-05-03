@@ -1,5 +1,3 @@
 # Get Next Line
 
-Here's my solution to the Get Next Line [42 (school)](https://en.wikipedia.org/wiki/42_(school)) project.
-
-<!-- * Subject is [here](https://github.com/AOhapkin/libft/blob/main/en.subject.pdf) -->
+Данный проект представляет собой функцию на языке программирования C, которая читает файл построчно и возвращает следующую строку при каждом вызове.
